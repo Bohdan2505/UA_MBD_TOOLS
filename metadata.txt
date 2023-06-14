@@ -5,12 +5,12 @@
 [general]
 name=UA_MBD_TOOLS
 qgisMinimumVersion=3.0
-description=Tools for 
+description=Tools for designing urban planning documentation according to the structure of the GDB (approved by the order of the Ministry of Regional Development of Ukraine № 56 of 22 February 2022) 
 version=0.1
 author=Bohdan2505
 email=bogdan.zhuravel.00@gmail.com
 
-about=The UA_MBD_TOOLS plugin was created with the support of the initiative group of the crowdsourcing project 'Open Spatial Planning Tools in Ukraine'. The UA_MBD_TOOLS plugin contains tools designed to simplify the work of designing urban planning documentation according to the structure of the GDB (approved by the order of the Ministry of Regional Development) List of available functions: 1. Batch import of exchange files in formats: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
+about=The UA_MBD_TOOLS plugin was created with the support of the initiative group of the crowdsourcing project 'Open Spatial Planning Tools in Ukraine'. The UA_MBD_TOOLS plugin contains tools designed to simplify the work of designing urban planning documentation according to the structure of the GDB (approved by the order of the Ministry of Regional Development of Ukraine № 56 of 22 February 2022) List of available functions: 1. Batch import of exchange files in formats: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
 
 tracker=https://github.com/Bohdan2505/UA_MBD_TOOLS/issues
 repository=https://github.com/Bohdan2505/UA_MBD_TOOLS
