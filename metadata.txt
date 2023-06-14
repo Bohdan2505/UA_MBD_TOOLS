@@ -1,0 +1,47 @@
+# This file contains metadata for your plugin.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=UA_MBD_TOOLS
+qgisMinimumVersion=3.0
+description=Tools for 
+version=0.1
+author=Bohdan2505
+email=bogdan.zhuravel.00@gmail.com
+
+about=The UA_MBD_TOOLS plugin was created with the support of the initiative group of the crowdsourcing project 'Open Spatial Planning Tools in Ukraine'. The UA_MBD_TOOLS plugin contains tools designed to simplify the work of designing urban planning documentation according to the structure of the GDB (approved by the order of the Ministry of Regional Development) List of available functions: 1. Batch import of exchange files in formats: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
+
+tracker=https://github.com/Bohdan2505/UA_MBD_TOOLS/issues
+repository=https://github.com/Bohdan2505/UA_MBD_TOOLS
+# End of mandatory metadata
+
+# Recommended items:
+
+hasProcessingProvider=no
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=import, python, urban_planning
+
+homepage=https://github.com/Bohdan2505/UA_MBD_TOOLS
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+Category of the plugin: Raster, Vector, Database or Web
+# category=
+
+# If the plugin can run on QGIS Server.
+server=False
+
