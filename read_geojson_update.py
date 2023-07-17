@@ -49,7 +49,7 @@ def multiprocessing_read_geojson(uri_layer_names_list):
             results = pool.map(check_exchange_layer, uri_layer_names_list)
             pool.close()
             pool.join()
-            print(f'elapsed {(time.time() - timer)} seconds')
+            # print(f'elapsed {(time.time() - timer)} seconds')
             return results
     except Exception as e:
             runnable = Runnable()
@@ -83,11 +83,13 @@ class Runnable(QRunnable):
             mutex.lock()
             timer = time.time()
             newFeature = QgsFeature()
+            
             progress_bar_percent_step = int(50/len(self.uri_layer_names_list)*100)
             check_result_all_layer_IS = True
             progress_bar_value = 0
             PLUGIN_WINDOW.dockwidget.status_label.setText('Статус: Триває перевірка шарів')
             PLUGIN_WINDOW.dockwidget.progressBar.setMaximum(10000)
+            # print(self.uri_layer_names_list)
             if self.multiprocessing_bool:
                 readed_layer_list = multiprocessing_read_geojson(self.uri_layer_names_list)
             else:
@@ -100,7 +102,6 @@ class Runnable(QRunnable):
                         logging.info(f'Перевірка шару "{x[1]}" пройшла успішно')
                         progress_bar_value += progress_bar_percent_step
                         self.signals.progress.emit(progress_bar_value)
- 
                     except Exception as e:
                         logging.exception(f'Помилка у функції Runnable.run() при перевірці шару "{x[1]}": {str(e)}')
                         msg_box_show(('Error', f'Помилка у функції Runnable.run() при перевірці шару "{x[1]}": {str(e)}'))
@@ -144,7 +145,7 @@ def get_project_layer_names_list():
             layers = QgsProject.instance().mapLayersByName(x)
             
             for i in layers:
-                print(i.providerType())
+                # print(i.providerType())
                 if i.type() == QgsMapLayerType.VectorLayer:
                     if i.providerType() == 'postgres':
                         layers_dict[layers[layers.index(i)].dataProvider().dataSourceUri().split('.')[1].split('"')[1]] = x
@@ -228,12 +229,12 @@ def check_gdb_directory_exists(path):
             if os.path.splitext(path)[1] == '.gdb':
                 return True
             else:
-                msgbox = QMessageBox(QMessageBox.Information, "Error", "За вказаним шляхом не знайдено папки (директорії) .gdb, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
-                msgbox.exec_()
+                # msgbox = QMessageBox(QMessageBox.Information, "Error", "За вказаним шляхом не знайдено папки (директорії) .gdb, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
+                # msgbox.exec_()
                 return False
         else:
-            msgbox = QMessageBox(QMessageBox.Warning, "Error", "За вказаним шляхом не знайдено папки (директорії) .gdb, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
-            msgbox.exec_()
+            # msgbox = QMessageBox(QMessageBox.Warning, "Error", "За вказаним шляхом не знайдено папки (директорії) .gdb, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
+            # msgbox.exec_()
             return False
     except Exception as e:
         logging.exception(f'Помилка у функції check_gdb_directory_exists: {str(e)}')
@@ -247,12 +248,12 @@ def check_gpkg_file_exists(path):
             if os.path.splitext(path)[1] == '.gpkg':
                 return True
             else:
-                msgbox = QMessageBox(QMessageBox.Information, "Error", "За вказаним шляхом не знайдено жодного файлу .gpkg, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
-                msgbox.exec_()
+                # msgbox = QMessageBox(QMessageBox.Information, "Error", "За вказаним шляхом не знайдено жодного файлу .gpkg, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
+                # msgbox.exec_()
                 return False
         else:
-            msgbox = QMessageBox(QMessageBox.Warning, "Error", "За вказаним шляхом не знайдено жодного файлу .gpkg, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
-            msgbox.exec_()
+            # msgbox = QMessageBox(QMessageBox.Warning, "Error", "За вказаним шляхом не знайдено жодного файлу .gpkg, будь ласка перевірте коректність вводу шляху", QMessageBox.Ok)
+            # msgbox.exec_()
             return False
     except Exception as e:
         logging.exception(f'Помилка у функції check_gpkg_file_exists: {str(e)}')
@@ -261,6 +262,7 @@ def check_gpkg_file_exists(path):
     
 
 def run_copy_data_from_layers_loop(args):
+    # print(args)
     try:
         exchange_layers_count = 0
         temp_exchange_layers_count = 0
@@ -274,6 +276,7 @@ def run_copy_data_from_layers_loop(args):
         PLUGIN_WINDOW.dockwidget.status_label.setText('Статус: Триває процес копіювання шарів')
         time.sleep(1)
         for x in check_result_list:
+            
             if x['result'] == True and copy_all_as_temp_bool == False:
                 logging.info(f"Триває процес копіювання даних з шару {x['function_args']['args'][1]}")
                 copy_result = run_copying_process(x['function_args']['args'])
@@ -284,24 +287,13 @@ def run_copy_data_from_layers_loop(args):
             elif copy_all_as_temp_bool == True:
                 try:
                     logging.info(f"Триває процес копіювання даних з шару {x['function_args']['args'][1]}")
-                    source_layer = QgsVectorLayer(x['function_args']['args'][0], str(x['function_args']['args'][1]) + '_EXCHANGE_TEMP', 'ogr')
-                    create_temp_layer_result = add_layer_copy_as_temp_layer(source_layer)
-                    if source_layer.isValid() and create_temp_layer_result['result']:
-                        if copy_data_between_vlayers(source_layer, create_temp_layer_result['layer']):
-                            exchange_layers_count += 1
-                            temp_exchange_layers_count += 1
-                        else: 
-                            logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані.")
-                    else: logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані. Помилка валідації шарів при копіюванні. source_layer.isValid(): {source_layer.isValid()}; target_layer.isValid(): {create_temp_layer_result['layer'].isValid()}")
-                except Exception as e:
-                    logging.exception(f'Помилка у функції run_copy_data_from_layers_loop при створенні тимчасового шару: {str(e)}')
-                    msg_box_show(('Error', f'Помилка у функції run_copy_data_from_layers_loop при створенні тимчасового шару: {str(e)}'))
-                
-            elif x['result'] == False and len(x['result_variables']) > 0 and temp_layer_create_bool == True:
-                
-                if x['result_variables']['layer_empty_check_result']['check_result'] == True and x['result_variables']['layer_name_exists_check_result']['check_result'] == False:
-                    try:
-                        logging.info(f"Триває процес копіювання даних з шару {x['function_args']['args'][1]}")
+                    layer_uri = x['function_args']['args'][0]
+                    layer_name = x['function_args']['args'][1]
+                    layers_exclusion = ['_clasiffier', 'clasif_vidiv_funk_prizn', 'gdb_metadata', 'kodyfikator', '_clasiffier_EXCHANGE_TEMP', 'clasif_vidiv_funk_prizn_EXCHANGE_TEMP', 'gdb_metadata_EXCHANGE_TEMP', 'kodyfikator_EXCHANGE_TEMP', '_clasiffier_EXCHANGE_TEMP_TEMP', 'clasif_vidiv_funk_prizn_EXCHANGE_TEMP_TEMP', 'gdb_metadata_EXCHANGE_TEMP_TEMP', 'kodyfikator_EXCHANGE_TEMP_TEMP']
+                    if layer_name not in layers_exclusion:
+                        if os.path.splitext(layer_uri)[1] == '.gpkg' or os.path.splitext(layer_uri)[1] == '.gdb':
+                                layer_uri = f"{layer_uri}|layername={layer_name}"
+                        layer_name = f'{layer_name}_EXCHANGE_TEMP'
                         source_layer = QgsVectorLayer(x['function_args']['args'][0], str(x['function_args']['args'][1]) + '_EXCHANGE_TEMP', 'ogr')
                         create_temp_layer_result = add_layer_copy_as_temp_layer(source_layer)
                         if source_layer.isValid() and create_temp_layer_result['result']:
@@ -311,6 +303,33 @@ def run_copy_data_from_layers_loop(args):
                             else: 
                                 logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані.")
                         else: logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані. Помилка валідації шарів при копіюванні. source_layer.isValid(): {source_layer.isValid()}; target_layer.isValid(): {create_temp_layer_result['layer'].isValid()}")
+                    else: logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані.")
+                except Exception as e:
+                    logging.exception(f'Помилка у функції run_copy_data_from_layers_loop при створенні тимчасового шару: {str(e)}')
+                    msg_box_show(('Error', f'Помилка у функції run_copy_data_from_layers_loop при створенні тимчасового шару: {str(e)}'))
+                
+            elif x['result'] == False and len(x['result_variables']) > 0 and temp_layer_create_bool == True:
+                if x['result_variables']['layer_empty_check_result']['check_result'] == True and x['result_variables']['layer_name_exists_check_result']['check_result'] == False:
+                    try:
+                        logging.info(f"Триває процес копіювання даних з шару {x['function_args']['args'][1]}")
+                        layer_uri = x['function_args']['args'][0]
+                        layer_name = x['function_args']['args'][1]
+                        layers_exclusion = ['_clasiffier', 'clasif_vidiv_funk_prizn', 'gdb_metadata', 'kodyfikator', '_clasiffier_EXCHANGE_TEMP', 'clasif_vidiv_funk_prizn_EXCHANGE_TEMP', 'gdb_metadata_EXCHANGE_TEMP', 'kodyfikator_EXCHANGE_TEMP', '_clasiffier_EXCHANGE_TEMP_TEMP', 'clasif_vidiv_funk_prizn_EXCHANGE_TEMP_TEMP', 'gdb_metadata_EXCHANGE_TEMP_TEMP', 'kodyfikator_EXCHANGE_TEMP_TEMP']
+                        if layer_name not in layers_exclusion:
+                            if os.path.splitext(layer_uri)[1] == '.gpkg' or os.path.splitext(layer_uri)[1] == '.gdb':
+                                layer_uri = f"{layer_uri}|layername={layer_name}"
+                            layer_name = f'{layer_name}_EXCHANGE_TEMP'
+                            source_layer = QgsVectorLayer(layer_uri, layer_name, 'ogr')
+                            # source_layer = QgsVectorLayer(x['function_args']['args'][0], str(x['function_args']['args'][1]) + '_EXCHANGE_TEMP', 'ogr')
+                            create_temp_layer_result = add_layer_copy_as_temp_layer(source_layer)
+                            if source_layer.isValid() and create_temp_layer_result['result']:
+                                if copy_data_between_vlayers(source_layer, create_temp_layer_result['layer']):
+                                    exchange_layers_count += 1
+                                    temp_exchange_layers_count += 1
+                                else: 
+                                    logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані.")
+                            else: logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані. Помилка валідації шарів при копіюванні. source_layer.isValid(): {source_layer.isValid()}; target_layer.isValid(): {create_temp_layer_result['layer'].isValid()}")
+                        else: logging.info(f"Об'єкти з шару {x['function_args']['args'][1]} не були скопійовані.")
                     except Exception as e:
                         logging.exception(f'Помилка у функції run_copy_data_from_layers_loop при створенні тимчасового шару: {str(e)}')
                         msg_box_show(('Error', f'Помилка у функції run_copy_data_from_layers_loop при створенні тимчасового шару: {str(e)}'))
@@ -403,7 +422,8 @@ def run_copying_process(args):
         if os.path.basename(layer_uri).split('.')[1] == 'gpkg' or os.path.basename(layer_uri).split('.')[1] == 'gdb':
             layer_uri = f"{layer_uri}|layername={layer_name}"
         layers_dict = get_project_layer_names_list()
-        layers_exclusion = ['_clasiffier', 'clasif_vidiv_funk_prizn', 'gdb_metadata', 'kodyfikator']
+        layers_exclusion = ['_clasiffier', 'clasif_vidiv_funk_prizn', 'gdb_metadata', 'kodyfikator', '_clasiffier_EXCHANGE_TEMP', 'clasif_vidiv_funk_prizn_EXCHANGE_TEMP', 'gdb_metadata_EXCHANGE_TEMP', 'kodyfikator_EXCHANGE_TEMP', '_clasiffier_EXCHANGE_TEMP_TEMP', 'clasif_vidiv_funk_prizn_EXCHANGE_TEMP_TEMP', 'gdb_metadata_EXCHANGE_TEMP_TEMP', 'kodyfikator_EXCHANGE_TEMP_TEMP']
+        # print(f'{layer_name} - {layer_name not in layers_exclusion}')
         if layer_name in layers_dict:
             layers = QgsProject.instance().mapLayersByName(layers_dict[layer_name])
             if len(layers) > 0 and layer_name not in layers_exclusion:
@@ -525,7 +545,24 @@ def import_data_from_database_file(path, multiprocessing_bool, temp_layer_create
                 pool.start(runnable)
                 runnable.signals.result.connect(run_copy_data_from_layers_loop)
                 runnable.signals.error.connect(msg_box_show)
+            elif check_gdb_directory_exists(path):
+                PLUGIN_WINDOW.dockwidget.tabWidget.setCurrentIndex(2)
+                geodatabase_layer = QgsVectorLayer(path,"test","ogr")
+                subLayers = geodatabase_layer.dataProvider().subLayers()
+                uri_layer_names_list = []
+                for subLayer in subLayers:
+                    name = subLayer.split('!!::!!')[1]
+                    uri_layer_names_list.append([path, name])
+                threadCount = QThreadPool.globalInstance().maxThreadCount()
+                pool = QThreadPool.globalInstance()
+                timer = time.time()
+                runnable = Runnable(uri_layer_names_list, False, temp_layer_create_bool, copy_all_as_temp_bool)
+                pool.start(runnable)
+                runnable.signals.result.connect(run_copy_data_from_layers_loop)
+                runnable.signals.error.connect(msg_box_show)
                 #runnable.signals.status.connect(msg_box_show)
+            else:
+                msg_box_show(("Error", f"За вказаним шляхом не знайдено жодного файлу {file_format}, будь ласка перевірте коректність вводу шляху"))
         else: 
             logging.exception('Error: file_format != .gpkg or .gdb')
             msg_box_show(('Error', 'Формат файлу != .gpkg or .gdb'))
