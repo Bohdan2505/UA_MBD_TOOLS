@@ -5,8 +5,8 @@
 [general]
 name=UA_MBD_TOOLS
 qgisMinimumVersion=3.0
-description=Tools for 
-version=0.2
+description=Tools designed to simplify the work of designing urban planning documentation (in Ukraine) 
+version=0.2.1
 author=Bohdan2505
 email=bogdan.zhuravel.00@gmail.com
 
@@ -20,7 +20,10 @@ repository=https://github.com/Bohdan2505/UA_MBD_TOOLS
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=
+ Version 0.2.1:
+ * Виправлено помилку вставки дані в шари, що мають схожу назву та структуру, наприклад в попередній версії дані з шару env_protect_meas_pg (полігональна геометрія) могли копіювати в шар env_protect_meas_l (лінійна геометрія)
+
 
 # Tags are comma separated with spaces allowed
 tags=import, python, urban_planning

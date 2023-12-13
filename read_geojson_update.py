@@ -372,7 +372,7 @@ def clear_ui_widget_elements(dockwidget):
 def copy_data_between_vlayers(source_layer, target_layer):
     try:        
         if source_layer.isValid() and target_layer.isValid():
-            logging.info(f'Копіювання даних з шару {source_layer.name()} в шар {target_layer.name()}')
+            logging.info(f'Копіювання даних з шару {source_layer.name()} в шар {target_layer.name()} ({target_layer.dataProvider().dataSourceUri()})')
             feature_count_before_copying = target_layer.featureCount() 
             QgsProject.instance().addMapLayer(source_layer)
             source_layer.selectAll()
@@ -383,7 +383,7 @@ def copy_data_between_vlayers(source_layer, target_layer):
             target_layer.removeSelection()
             target_layer.commitChanges()
             feature_count_after_copying = target_layer.featureCount()
-            logging.info(f"УСПІШНО ПРОВЕДЕНО копіювання даних з шару {source_layer.name()} в шар {target_layer.name()}.")
+            logging.info(f"УСПІШНО ПРОВЕДЕНО копіювання даних з шару {source_layer.name()} в шар {target_layer.name()} ({target_layer.dataProvider().dataSourceUri()}).")
             logging.info(f"Кількість скопійованих об'єктів {feature_count_after_copying - feature_count_before_copying} із {source_layer.featureCount()}")
             QgsProject.instance().removeMapLayers([source_layer.id()])
             return True
@@ -427,7 +427,13 @@ def run_copying_process(args):
         if layer_name in layers_dict:
             layers = QgsProject.instance().mapLayersByName(layers_dict[layer_name])
             if len(layers) > 0 and layer_name not in layers_exclusion:
-                target_layer = layers[0]
+                # target_layer = layers[0]
+                for x in layers:
+                    if layer_name in x.dataProvider().dataSourceUri():
+                        target_layer = x
+                        break
+                    else: 
+                        target_layer = layers[0]
                 source_layer = QgsVectorLayer(layer_uri, str(layer_name) + '_EXCHANGE', 'ogr')
                 if source_layer.isValid() and target_layer.isValid():
                     if copy_data_between_vlayers(source_layer, target_layer) == True:
