@@ -5,12 +5,21 @@
 [general]
 name=UA_MBD_TOOLS
 qgisMinimumVersion=3.0
-description=Tools designed to simplify the work of designing urban planning documentation (in Ukraine) 
-version=0.2.1
+description=Tools for 
+version=0.2.2
 author=Bohdan2505
 email=bogdan.zhuravel.00@gmail.com
 
-about=The UA_MBD_TOOLS plugin was created with the support of the initiative group of the crowdsourcing project 'Open Spatial Planning Tools in Ukraine'. The UA_MBD_TOOLS plugin contains tools designed to simplify the work of designing urban planning documentation according to the structure of the GDB (approved by the order of the Ministry of Regional Development) List of available functions: 1. Batch import of exchange files in formats: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
+about=UA_MBD_TOOLS плагін створений за підтримки створено за підтримки ініціативної групи краудсорсингового проекту 'Відкриті інструменти просторового планування в Україні'. Плагін UA_MBD_TOOLS містить інструменти, що покликані спростити роботу при проектуванні містобудівної документації за структурою БГД (затвердженої наказом Мінрегіону) та інших робіт з просторовими даними.
+		1. Пакетний імпорт обмінних файлів в форматах: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
+		2. Пакетний експорт обмінних файлів в форматах: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
+		3. Зміна СК шарів в ПУСТИХ базах geopackage та gdb (для перерахунку координат об'єктів потрібно розробляти окремий алгоритм) 
+		4. Присвоєння стилів (символіка та підписи) шарам (можливо використовувати власні шари, метчінг йде за назвою файлу або таблиці з шаром і назвою файлу стилю)
+		The UA_MBD_TOOLS plugin was created with the support of the initiative group of the crowdsourcing project 'Open Spatial Planning Tools in Ukraine'. The UA_MBD_TOOLS plugin contains tools designed to simplify the work of designing urban planning documentation according to the structure of the GDB (approved by the order of the Ministry of Regional Development) List of available functions: 		1. Batch import of exchange files in formats: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
+		2. Batch export of exchange files in formats: .json, .geojson, .shp (Shape), .gdb (Esri FileGDB), .gpkg (Geopackage)
+		3. Changing the SC of layers in the EMPTY geopackage and gdb databases (a separate algorithm must be developed to recalculate the coordinates of objects)
+		4. Assigning styles (symbols and captions) to layers (you can use your own layers, tagging goes by the name of the file or table with the layer and the name of the style file)
+
 
 tracker=https://github.com/Bohdan2505/UA_MBD_TOOLS/issues
 repository=https://github.com/Bohdan2505/UA_MBD_TOOLS
@@ -21,8 +30,9 @@ repository=https://github.com/Bohdan2505/UA_MBD_TOOLS
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
 changelog=
- Version 0.2.1:
- * Виправлено помилку вставки дані в шари, що мають схожу назву та структуру, наприклад в попередній версії дані з шару env_protect_meas_pg (полігональна геометрія) могли копіювати в шар env_protect_meas_l (лінійна геометрія)
+ Version 0.2.2:
+ * Додано новий функціонал: експорт шарів, створення копії пустої бази (gpkg, gdb), пакетне підключення стилів символіки
+ * (ENG) Added new functionality: export layers, create a copy of an empty database (gpkg, gdb), batch connection of symbolic styles
 
 
 # Tags are comma separated with spaces allowed
