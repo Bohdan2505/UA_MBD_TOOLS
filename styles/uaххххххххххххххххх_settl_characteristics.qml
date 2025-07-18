@@ -1,0 +1,75 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis styleCategories="Symbology|Labeling|Fields" version="3.40.0-Bratislava">
+  <fieldConfiguration>
+    <field name="fid" configurationFlags="NoFlag"/>
+    <field name="name" configurationFlags="NoFlag"/>
+    <field name="unit" configurationFlags="NoFlag"/>
+    <field name="ind_in" configurationFlags="NoFlag"/>
+    <field name="ind_pr" configurationFlags="NoFlag"/>
+    <field name="ind_pro" configurationFlags="NoFlag"/>
+    <field name="ind_ext" configurationFlags="NoFlag"/>
+    <field name="note" configurationFlags="NoFlag"/>
+  </fieldConfiguration>
+  <aliases>
+    <alias field="fid" index="0" name=""/>
+    <alias field="name" index="1" name="назва характеристики"/>
+    <alias field="unit" index="2" name="одиниця виміру"/>
+    <alias field="ind_in" index="3" name="значення існуючого стану"/>
+    <alias field="ind_pr" index="4" name="значення на короткостроковий період"/>
+    <alias field="ind_pro" index="5" name="значення на середньостроковий період"/>
+    <alias field="ind_ext" index="6" name="значення на довгостроковий період"/>
+    <alias field="note" index="7" name="примітка"/>
+  </aliases>
+  <splitPolicies>
+    <policy policy="Duplicate" field="fid"/>
+    <policy policy="Duplicate" field="name"/>
+    <policy policy="Duplicate" field="unit"/>
+    <policy policy="Duplicate" field="ind_in"/>
+    <policy policy="Duplicate" field="ind_pr"/>
+    <policy policy="Duplicate" field="ind_pro"/>
+    <policy policy="Duplicate" field="ind_ext"/>
+    <policy policy="Duplicate" field="note"/>
+  </splitPolicies>
+  <duplicatePolicies>
+    <policy policy="Duplicate" field="fid"/>
+    <policy policy="Duplicate" field="name"/>
+    <policy policy="Duplicate" field="unit"/>
+    <policy policy="Duplicate" field="ind_in"/>
+    <policy policy="Duplicate" field="ind_pr"/>
+    <policy policy="Duplicate" field="ind_pro"/>
+    <policy policy="Duplicate" field="ind_ext"/>
+    <policy policy="Duplicate" field="note"/>
+  </duplicatePolicies>
+  <defaults>
+    <default field="fid" expression="" applyOnUpdate="0"/>
+    <default field="name" expression="" applyOnUpdate="0"/>
+    <default field="unit" expression="" applyOnUpdate="0"/>
+    <default field="ind_in" expression="" applyOnUpdate="0"/>
+    <default field="ind_pr" expression="" applyOnUpdate="0"/>
+    <default field="ind_pro" expression="" applyOnUpdate="0"/>
+    <default field="ind_ext" expression="" applyOnUpdate="0"/>
+    <default field="note" expression="" applyOnUpdate="0"/>
+  </defaults>
+  <constraints>
+    <constraint field="fid" unique_strength="1" notnull_strength="1" exp_strength="0" constraints="3"/>
+    <constraint field="name" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+    <constraint field="unit" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+    <constraint field="ind_in" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+    <constraint field="ind_pr" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+    <constraint field="ind_pro" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+    <constraint field="ind_ext" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+    <constraint field="note" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+  </constraints>
+  <constraintExpressions>
+    <constraint field="fid" exp="" desc=""/>
+    <constraint field="name" exp="" desc=""/>
+    <constraint field="unit" exp="" desc=""/>
+    <constraint field="ind_in" exp="" desc=""/>
+    <constraint field="ind_pr" exp="" desc=""/>
+    <constraint field="ind_pro" exp="" desc=""/>
+    <constraint field="ind_ext" exp="" desc=""/>
+    <constraint field="note" exp="" desc=""/>
+  </constraintExpressions>
+  <expressionfields/>
+  <layerGeometryType>4</layerGeometryType>
+</qgis>
